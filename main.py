@@ -63,6 +63,7 @@ def convert_from_decimal(number: int, base: int) -> tuple[str, list[str]]:
 
     return result or '0', steps
 
+
 def add_in_base(num1: str, num2: str, base: int) -> str:
     if base < 2:
         raise ValueError("Base must be 2 or higher.")
@@ -144,106 +145,42 @@ def multiply_in_base(num1: str, num2: str, base: int) -> str:
 
 
 def divide_in_base(num1: str, num2: str, base: int) -> str:
-    if base > len(chars):
-        raise ValueError(f"Base cannot be greater than {len(chars)}.")
-
-    if num2 == '0':
-        return "Infinity"
-
-    num1_val = int(num1, base)
-    num2_val = int(num2, base)
-
-    quotient_val = num1_val // num2_val
-    remainder_val = num1_val % num2_val
-
-    quotient = ''
-    while quotient_val > 0:
-        quotient = chars[quotient_val % base] + quotient
-        quotient_val //= base
-
-    return quotient or '0'
-
-
-def add_in_base(num1: str, num2: str, base: int) -> str:
-    if base < 2:
-        raise ValueError("Base must be 2 or higher.")
-
-    max_length = max(len(num1), len(num2))
-    num1 = num1.zfill(max_length)
-    num2 = num2.zfill(max_length)
-    result = []
-    carry = 0
-
-    for i in range(max_length - 1, -1, -1):
-        digit1 = int(num1[i], base)
-        digit2 = int(num2[i], base)
-        digit_sum = digit1 + digit2 + carry
-        carry = digit_sum // base
-        result.append(str(digit_sum % base))
-
-    if carry:
-        result.append(str(carry))
-
-    return ''.join(reversed(result))
-
-
-def subtract_in_base(num1: str, num2: str, base: int) -> str:
-    max_length = max(len(num1), len(num2))
-    num1 = num1.zfill(max_length)
-    num2 = num2.zfill(max_length)
-
-    result = []
-    borrow = 0
-
-    for i in range(max_length - 1, -1, -1):
-        digit1 = int(num1[i], base) - borrow
-        digit2 = int(num2[i], base)
-
-        if digit1 < digit2:
-            digit1 += base
-            borrow = 1
-        else:
-            borrow = 0
-
-        result.append(str(digit1 - digit2))
-
-    return ''.join(reversed(result)).lstrip('0') or '0'
-
-
-def multiply_in_base(num1: str, num2: str, base: int) -> str:
-    result = '0'
-    num1 = num1[::-1]
-
-    for i, digit in enumerate(num1):
-        for j in range(int(digit, base)):
-            partial_sum = add_in_base(result, num2, base)
-            result = partial_sum
-
-        result = result + '0' * i
-
-    return result.lstrip('0') or '0'
-
-
-def divide_in_base(num1: str, num2: str, base: int) -> str:
-    if num2 == '0':
-        return "Infinity"
+    if num2 == '0': return "Infinity"
 
     quotient = ''
     remainder = num1
 
     while len(remainder) >= len(num2):
-        # We will perform subtraction and keep track of the quotient.
         temp = num2
         count = 0
-        while len(remainder) >= len(temp):
-            # Increase count and subtract temp from remainder
+
+        # Keep subtracting until remainder is smaller than divisor
+        while compare_in_base(remainder, temp, base) >= 0:
             remainder = subtract_in_base(remainder, temp, base)
             count += 1
-            # Increase temp by one more time if we can still subtract
-        quotient += str(count)
+
+        # Convert the count to the appropriate base and append to quotient
+        quotient += convert_to_base(count, base)
 
     return quotient.lstrip('0') or '0'
 
+def compare_in_base(num1: str, num2: str, base: int) -> int:
+    # Compare two numbers in the given base
+    if len(num1) != len(num2):
+        return len(num1) - len(num2)
+    for i in range(len(num1)):
+        if num1[i] != num2[i]:
+            return int(num1[i], base) - int(num2[i], base)
+    return 0
+
+def convert_to_base(num: int, base: int) -> str:
+    if num == 0:
+        return '0'
+    result = ''
+    while num > 0:
+        result = str(num % base) + result
+        num //= base
+    return result
 
 def parse_math_expression(expression: str):
     """
