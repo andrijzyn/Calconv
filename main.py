@@ -3,11 +3,12 @@ import argparse
 
 chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+
 def convert_to_decimal(number: str, base: int) -> tuple[int, list[str]]:
     """
     :param number: The number in string format to be converted to decimal.
-    :param base: The base of the number to be converted. Must be 2 or higher.
-    :return: A tuple containing the decimal value of the number and a list of strings describing each conversion step.
+    :param base: The base of the number to be converted.
+    :return: A tuple containing the decimal value and a list of steps taken during conversion.
     """
     if base < 2:
         raise ValueError("Base must be 2 or higher.")
@@ -28,8 +29,8 @@ def convert_to_decimal(number: str, base: int) -> tuple[int, list[str]]:
             raise ValueError(f"Digit '{digit}' is not valid for base {base}.")
 
         decimal_value += digit_value * (base ** power)
-        
-        if power >= 0:  # Only add step if there is a meaningful power
+
+        if power >= 0:
             steps.append(
                 f"Digit: {digit} in base {base}, value: {digit_value} * (base ** {power}) = {digit_value * (base ** power)}")
         power -= 1
@@ -40,8 +41,8 @@ def convert_to_decimal(number: str, base: int) -> tuple[int, list[str]]:
 def convert_from_decimal(number: int, base: int) -> tuple[str, list[str]]:
     """
     :param number: The decimal number to be converted.
-    :param base: The base to which the decimal number should be converted.
-    :return: A tuple containing the converted number as a string and a list of steps showing the division and remainder operations performed during the conversion process.
+    :param base: The base to which the number should be converted.
+    :return: A tuple containing the converted number as a string in the specified base, and a list of steps detailing the conversion process.
     """
     if base < 2:
         raise ValueError("Base must be 2 or higher.")
@@ -65,9 +66,14 @@ def convert_from_decimal(number: int, base: int) -> tuple[str, list[str]]:
 
 
 def add_in_base(num1: str, num2: str, base: int) -> str:
+    """
+    :param num1: A string representing the first number in the specified base.
+    :param num2: A string representing the second number in the specified base.
+    :param base: An integer representing the numeric base for the input numbers.
+    :return: A string representing the sum of the two numbers in the specified base.
+    """
     if base < 2:
         raise ValueError("Base must be 2 or higher.")
-
     if base > len(chars):
         raise ValueError(f"Base cannot be greater than {len(chars)}.")
 
@@ -91,6 +97,12 @@ def add_in_base(num1: str, num2: str, base: int) -> str:
 
 
 def subtract_in_base(num1: str, num2: str, base: int) -> str:
+    """
+    :param num1: The first number as a string in the given base.
+    :param num2: The second number as a string in the given base.
+    :param base: The numerical base for the numbers (e.g., base 10 for decimal, base 16 for hexadecimal).
+    :return: The result of subtracting num2 from num1 in the given base, represented as a string.
+    """
     if base > len(chars):
         raise ValueError(f"Base cannot be greater than {len(chars)}.")
 
@@ -120,6 +132,12 @@ def subtract_in_base(num1: str, num2: str, base: int) -> str:
 
 
 def multiply_in_base(num1: str, num2: str, base: int) -> str:
+    """
+    :param num1: The first number as a string in the specified base.
+    :param num2: The second number as a string in the specified base.
+    :param base: The base in which to perform the multiplication.
+    :return: The product of num1 and num2 as a string in the specified base.
+    """
     if base > len(chars):
         raise ValueError(f"Base cannot be greater than {len(chars)}.")
 
@@ -145,12 +163,25 @@ def multiply_in_base(num1: str, num2: str, base: int) -> str:
 
 
 def divide_in_base(num1: str, num2: str, base: int) -> str:
-    if num2 == '0': return "Infinity"
+    """
+    :param num1: The dividend represented as a string in the specified base.
+    :param num2: The divisor represented as a string in the specified base.
+    :param base: The numerical base in which the division is to be performed.
+    :return: The quotient of the division represented as a string in the specified base, or an error message if the operation could not complete.
+    """
+    if num2 == '0':
+        return "Infinity"
 
     quotient = ''
     remainder = num1
 
+    max_iterations = 499  # Limit the number of iterations to avoid looping
+    iteration_count = 0
+
     while len(remainder) >= len(num2):
+        if iteration_count > max_iterations:
+            return "Error: Too many iterations. Potential infinite loop detected."
+
         temp = num2
         count = 0
 
@@ -158,22 +189,33 @@ def divide_in_base(num1: str, num2: str, base: int) -> str:
         while compare_in_base(remainder, temp, base) >= 0:
             remainder = subtract_in_base(remainder, temp, base)
             count += 1
+            print(f"Iteration {iteration_count}: Remainder after subtraction: {remainder}")
+            iteration_count += 1
 
         # Convert the count to the appropriate base and append to quotient
         quotient += convert_to_base(count, base)
 
     return quotient.lstrip('0') or '0'
 
+
 def compare_in_base(num1: str, num2: str, base: int) -> int:
-    # Compare two numbers in the given base
-    if len(num1) != len(num2):
-        return len(num1) - len(num2)
-    for i in range(len(num1)):
-        if num1[i] != num2[i]:
-            return int(num1[i], base) - int(num2[i], base)
-    return 0
+    """
+    :param num1: The first number represented as a string in the specified base.
+    :param num2: The second number represented as a string in the specified base.
+    :param base: The base in which the numbers are represented.
+    :return: The difference between the two numbers in decimal form.
+    """
+    num1_decimal, _ = convert_to_decimal(num1, base)
+    num2_decimal, _ = convert_to_decimal(num2, base)
+    return num1_decimal - num2_decimal
+
 
 def convert_to_base(num: int, base: int) -> str:
+    """
+    :param num: The number to be converted to a different base. Must be a non-negative integer.
+    :param base: The base to convert the number to. Must be an integer between 2 and 36.
+    :return: A string representing the number in the specified base.
+    """
     if num == 0:
         return '0'
     result = ''
@@ -182,15 +224,13 @@ def convert_to_base(num: int, base: int) -> str:
         num //= base
     return result
 
+
 def parse_math_expression(expression: str):
     """
-    :param expression: A mathematical expression in the custom format 'num_base operator num_base',
-                       where 'num' is a number, 'base' is the base of that number, and 'operator' is
-                       a single arithmetic operator (+, -, *, /).
-    :return: A tuple containing the first number, its base, the second number, its base,
-             and the operator as separate elements.
-    :raises ValueError: If the input expression does not match the expected format or
-                        if the base of any number is less than 2.
+    :param expression: A string representing a mathematical expression that includes numbers in specific bases and a single operator.
+                       The expected format is 'number_base operator number_base'.
+    :return: A tuple containing the first number, its base, the second number, its base, and the operator.
+    :raises ValueError: If the input format is invalid or if any of the bases are less than 2.
     """
     pattern = r"([A-Za-z0-9]+)_([0-9]+)"
     numbers = re.findall(pattern, expression)
@@ -209,11 +249,12 @@ def parse_math_expression(expression: str):
 
 def calculate_result(num1: str, base1: int, num2: str, operation: str) -> tuple[str, list[str]]:
     """
-    :param num1: The first number in string format.
-    :param base1: The base of the first number.
-    :param num2: The second number in string format.
-    :param operation: The mathematical operation to be performed ('+', '-', '*', '/').
-    :return: A tuple containing the result of the operation in string format and a list of steps detailing the conversion process.
+    :param num1: The first number as a string in the given base.
+    :param base1: The base of the numbers (e.g., 2 for binary, 10 for decimal).
+    :param num2: The second number as a string in the given base.
+    :param operation: The arithmetic operation to perform. Supported operations are '+', '-', '*', and '/'.
+    :return: A tuple containing the result of the arithmetic operation in the given base as a string
+             and a list of steps involved in the calculation.
     """
     steps = []
     if operation == '+':
@@ -232,9 +273,10 @@ def calculate_result(num1: str, base1: int, num2: str, operation: str) -> tuple[
 
 def convert_between_bases(expression: str) -> tuple[str, list[str]]:
     """
-    :param expression: A string representing the number and the bases to convert from and to,
-                       in the format 'number_base1tobase2'. For example '101_2to10'.
-    :return: A tuple containing the converted number as a string and a list of conversion steps.
+    :param expression: A string representing the number and the bases to convert from and to, in the format "number_base1tobase2".
+                       For example, "101_2to10" would convert binary 101 to its decimal equivalent.
+    :return: A tuple where the first element is the converted number as a string, and the second element is a list of steps
+             taken during the conversion process.
     """
     pattern = r"([A-Za-z0-9]+)_([0-9]+)to([0-9]+)"
     match = re.match(pattern, expression)
@@ -260,8 +302,8 @@ def convert_between_bases(expression: str) -> tuple[str, list[str]]:
 
 def process_input(user_input: str):
     """
-    :param user_input: A string that either represents a base conversion command or a mathematical expression. For base conversion, the command should contain "to". For mathematical expressions, the command should include the numbers, their bases, and the operator.
-    :return: A formatted string with either the base conversion result and steps, or the mathematical calculation result and steps.
+    :param user_input: The string containing either a conversion command or a mathematical expression in different bases.
+    :return: A string containing the result of the conversion or computation, along with the detailed steps taken.
     """
     if "to" in user_input:
         result, steps = convert_between_bases(user_input)
@@ -274,8 +316,8 @@ def process_input(user_input: str):
 
 def main(args=None):
     """
-    :param args: List of command-line arguments passed to the program, defaults to None.
-    :return: None. Executes expression from command-line args or interactive prompt.
+    :param args: A list of command-line arguments passed to the script
+    :return: None
     """
     parser = argparse.ArgumentParser(description="Number Base Converter and Calculator")
     parser.add_argument('expression', metavar='E', type=str, nargs='?',
