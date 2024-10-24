@@ -132,34 +132,56 @@ def subtract_in_base(num1: str, num2: str, base: int) -> str:
 
 
 def multiply_in_base(num1: str, num2: str, base: int) -> str:
-    """
-    :param num1: The first number as a string in the specified base.
-    :param num2: The second number as a string in the specified base.
-    :param base: The base in which to perform the multiplication.
-    :return: The product of num1 and num2 as a string in the specified base.
-    """
     if base > len(chars):
         raise ValueError(f"Base cannot be greater than {len(chars)}.")
 
-    num1 = num1.upper()[::-1]
-    num2 = num2.upper()[::-1]
+    num1 = num1.upper()
+    num2 = num2.upper()
 
-    result = [0] * (len(num1) + len(num2))
+    intermediate_results = []
 
-    for i in range(len(num1)):
-        digit1 = chars.index(num1[i])
+    print(f"\nMultiplying {num1} by {num2} in base {base}:")
 
-        for j in range(len(num2)):
-            digit2 = chars.index(num2[j])
+    for i, digit2 in enumerate(reversed(num2)):
+        carry = 0
+        temp_result = [0] * i
 
-            product = digit1 * digit2
-            result[i + j] += product
-            result[i + j + 1] += result[i + j] // base
-            result[i + j] %= base
+        digit2_val = chars.index(digit2)
 
-    result = ''.join(chars[d] for d in reversed(result)).lstrip('0') or '0'
+        for digit1 in reversed(num1):
+            digit1_val = chars.index(digit1)
 
-    return result
+            product = digit1_val * digit2_val + carry
+            carry = product // base
+            temp_result.append(product % base)
+
+        if carry:
+            temp_result.append(carry)
+
+        temp_result = temp_result[::-1]
+        intermediate_results.append(temp_result)
+
+        step_str = ''.join(chars[d] for d in temp_result)
+        print(f"Step {i + 1}: {step_str}")
+
+    max_len = max(len(r) for r in intermediate_results)
+    for i in range(len(intermediate_results)):
+        intermediate_results[i] = [0] * (max_len - len(intermediate_results[i])) + intermediate_results[i]
+
+    result = [0] * max_len
+    carry = 0
+    for i in range(max_len - 1, -1, -1):
+        column_sum = sum(r[i] for r in intermediate_results) + carry
+        carry = column_sum // base
+        result[i] = column_sum % base
+
+    if carry:
+        result = [carry] + result
+
+    result_str = ''.join(chars[d] for d in result).lstrip('0') or '0'
+
+    print(f"\nA sum of past steps: {result_str}")
+    return result_str
 
 
 def divide_in_base(num1: str, num2: str, base: int) -> str:
