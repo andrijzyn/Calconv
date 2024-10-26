@@ -1,62 +1,76 @@
-# Number Base Converter and Calculator
-This Python script allows you to perform basic arithmetic operations (+, -, *, /) on numbers of different bases and provides the result in the higher base between the two operands. Additionally, it can convert numbers from one base to another.
+# 🧮 bN: Converter and Calculator
+The Python script is a simple yet effective tool that enables the user to perform fundamental arithmetic operations, including addition, subtraction, multiplication, and division, on numbers with varying bases and to return the result in the higher base between the two operands. Additionally, the script is capable of converting numbers from one base to another.
 
-## Features
-- Convert numbers from any given base to decimal (base-10)
-- Convert decimal numbers to any specified base
-- Convert from one base to another using `number_base1toBase2`
-- Parse mathematical expressions with different bases
-- Perform basic arithmetic operations on numbers with different bases
+> [!NOTE]
+> Enter mathematical expressions in the format:
+>
+> operand1_base1 operator operand2_base2
+>
+> Examples:
+>
+>     Addition: 101_2 + A_16 (Result: 111110011_16)
+>     Base Conversion: 10_10to4 (Result: 22_4)
+>
+> Explanation:
+>
+>     Operand and Base: operand_base represents a number in the specified base. For example, 101_2 is 101 in binary.
+>     Operator: Supported operators are +, -, *, and /.
+>     Output Base: The result will be displayed in the larger base of the two operands.
+For a better understanding of the structure and more readable documentation, we have described below the main functions that you will need when using the application
 
-## Prerequisites
-- Python 3.12.7
-
-## Installation
-1. Clone the repository:
-    ```
-    git clone https://github.com/pgmtags/DigitsCalculator.git
-    cd DigitsCalculator
-    ```
-
-## Usage
-To use the converter and calculator, run the `main` function:
-
-```
-python main.py
-```
-
-You will be prompted to enter a mathematical expression in the format: operand1_base1 operator operand2_base2
-### Examples
-For instance, to add two numbers `101_2` (binary) and `A_16` (hexadecimal), enter: 101_2 + A_16
-The script will then output the result in the larger base between the two operands: 
-```Result: 111110011_16```
-
-#### Base Conversion
-To convert the number `10` from decimal to base 4, enter: 10_10to4
-The script will then output the result in base 4: 
-```Converted result: 22_4```
+---
 
 ### Functions
-- **convert_to_decimal(number: str, base: int) -> int**
-  Converts a number from a specified base to its decimal equivalent.
+1. **convert_to_decimal(number, base)**:
 
-- **convert_from_decimal(number: int, base: int) -> str**
-  Converts a decimal number to the specified base.
+        Input: A string representing a number in a given base and the base itself.
+        Output: The decimal equivalent of the number and a list of steps involved in the conversion.
+        Functionality: Converts a number from a specified base to its decimal equivalent.
 
-- **parse_math_expression(expression: str)**
-  Parses a mathematical expression to extract operands and their bases.
+2. **convert_from_decimal(number, base)**:
 
-- **calculate_result(num1: str, base1: int, num2: str, base2: int, operation: str) -> str**
-  Performs a calculation based on two operands and an operation, returning the result in the larger base.
+        Input: A decimal number and the target base.
+        Output: The number in the specified base as a string and a list of steps.
+        Functionality: Converts a decimal number to a specified base.
 
-- **convert_between_bases(expression: str) -> str**
-  Converts a number from one base to another specified base.
+3. **add_in_base(num1, num2, base)**:
 
-### Handling Invalid Input
-The script will raise a `ValueError` if the input format is invalid. Ensure that the expression follows the format `operand1_base1 operator operand2_base2`.
+        Input: Two numbers in a given base and the base itself.
+        Output: The sum of the two numbers in the same base.
+        Functionality: Performs addition in a specified base.
 
-### Note
-Division by zero is handled by returning "Infinity".
+4. **subtract_in_base(num1, num2, base)**:
+    
+        Input: Two numbers in a given base and the base itself.
+        Output: The difference of the two numbers in the same base.
+        Functionality: Performs subtraction in a specified base.
+    
+5. **multiply_in_base(num1, num2, base)**:
 
-## Contributing
-Contributions are welcome! Please fork the repository, make your changes, and submit a pull request.
+        Input: Two numbers in a given base and the base itself.
+        Output: The product of the two numbers in the same base.
+        Functionality: Performs multiplication in a specified base, showing detailed steps.
+
+6. **divide_in_base(num1, num2, base)**:
+
+        Input: Two numbers in a given base and the base itself.
+        Output: The quotient of the division in the same base.
+        Functionality: Performs division in a specified base, showing detailed steps and handling potential errors.
+
+7. **compare_in_base(num1, num2, base)**:
+
+        Input: Two numbers in a given base and the base itself.
+        Output: The difference between the two numbers in decimal form.
+        Functionality: Compares two numbers in a given base by converting them to decimal and subtracting.
+
+8. **convert_to_base(num, base)**:
+
+        Input: A decimal number and the target base.
+        Output: The number in the specified base as a string.
+        Functionality: Converts a decimal number to a specified base.
+
+9. parse_math_expression(expression):
+
+        Input: A mathematical expression in the format 'operand1_base1 operator operand2_base2'.
+        Output: A tuple containing the operands, their bases, and the operator.
+        Functionality: Parses the input expression and extracts the relevant information.
