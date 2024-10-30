@@ -1,10 +1,6 @@
 import sys
 import unittest
-
-sys.path.insert(0, './')
-
 from main import parse_math_expression
-
 
 class ParseMathExpression(unittest.TestCase):
 
@@ -23,7 +19,7 @@ class ParseMathExpression(unittest.TestCase):
         with self.assertRaises(ValueError):
             parse_math_expression(expression)
 
-    def test_multiple_operactors(self):
+    def test_multiple_operators(self):
         expression = "12_2 + - 33_10"
         with self.assertRaises(ValueError):
             parse_math_expression(expression)
