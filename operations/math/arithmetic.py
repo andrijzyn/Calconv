@@ -108,7 +108,6 @@ class Arithmetic:
 
         result_str = ''.join(chars[d] for d in result).lstrip('0') or '0'
 
-        print(f"\nA sum of past steps: {result_str}")
         return result_str
 
     @staticmethod
