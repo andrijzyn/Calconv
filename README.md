@@ -6,7 +6,8 @@
 - **Operator**: Supported operators are `+`, `-`, `*`, and `/`.
 - **Output Base**: The result will be displayed in the larger base of the two operands.
 ___
-### With the recent update, an intuitive user interface (UI) has been added, enhancing user experience and making it easier to interact with the calculator.
+> [!NOTE]
+> ### With the recent update, an intuitive user interface (UI) has been added, enhancing user experience and making it easier to interact with the calculator.
 ![output_image](https://github.com/user-attachments/assets/f08f57a8-af4f-491d-9bbc-02cfa7478bf1)
 > Photo made by [Photo Contraster](https://github.com/andrijzyn/Photo-Contraster) & [Photo Rounder](https://github.com/andrijzyn/Photo-rounder)
 
@@ -34,7 +35,7 @@ ___
    ```bash
    python main.py
    ```
-4.After that, you can open the ~/UI/index.html file and start using the
+4. After that, you can open the **~/UI/index.html** file and start using the
 
 ## Technologies
 - Python
