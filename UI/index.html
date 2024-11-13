@@ -10,13 +10,13 @@
 <form id="calculator-form">
     <div>
         <label>Number 1:</label>
-        <input type="text" id="num1" placeholder="Enter number (e.g., A5)" required>
+        <label for="num1"></label><input type="text" id="num1" placeholder="Enter number (e.g., A5)" required>
         <label>Base:</label>
-        <input type="number" id="base1" min="2" max="36" placeholder="Base" required>
+        <label for="base1"></label><input type="number" id="base1" min="2" max="36" placeholder="Base" required>
     </div>
     <div>
         <label>Operator:</label>
-        <select id="operator" required>
+        <label for="operator"></label><select id="operator" required>
             <option value="+">+</option>
             <option value="-">-</option>
             <option value="*">*</option>
@@ -25,9 +25,9 @@
     </div>
     <div>
         <label>Number 2:</label>
-        <input type="text" id="num2" placeholder="Enter number (e.g., 101)" required>
+        <label for="num2"></label><input type="text" id="num2" placeholder="Enter number (e.g., 101)" required>
         <label>Base:</label>
-        <input type="number" id="base2" min="2" max="36" placeholder="Base" required>
+        <label for="base2"></label><input type="number" id="base2" min="2" max="36" placeholder="Base" required>
     </div>
     <button type="submit">Calculate</button>
 </form>
@@ -35,11 +35,11 @@
 <form id="conversion-form">
     <div>
         <label>Number:</label>
-        <input type="text" id="convert-number" placeholder="Enter number (e.g., 101)" required>
+        <label for="convert-number"></label><input type="text" id="convert-number" placeholder="Enter number (e.g., 101)" required>
         <label>From Base:</label>
-        <input type="number" id="convert-base1" min="2" max="36" placeholder="Base" required>
+        <label for="convert-base1"></label><input type="number" id="convert-base1" min="2" max="36" placeholder="Base" required>
         <label>To Base:</label>
-        <input type="number" id="convert-base2" min="2" max="36" placeholder="Base" required>
+        <label for="convert-base2"></label><input type="number" id="convert-base2" min="2" max="36" placeholder="Base" required>
     </div>
     <button type="submit">Convert</button>
 </form>
