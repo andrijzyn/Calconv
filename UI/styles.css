@@ -1,9 +1,217 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+:root {
+    /* Основные цвета */
+    --primary-50: #e3f2fd;
+    --primary-100: #bbdefb;
+    --primary-200: #90caf9;
+    --primary-300: #64b5f6;
+    --primary-400: #42a5f5;
+    --primary-500: #2196f3;
+    --primary-600: #1e88e5;
+    --primary-700: #1976d2;
+    --primary-800: #1565c0;
+    --primary-900: #0d47a1;
+
+    /* Нейтральные цвета */
+    --neutral-50: #fafafa;
+    --neutral-100: #f5f5f5;
+    --neutral-200: #eeeeee;
+    --neutral-300: #e0e0e0;
+    --neutral-400: #bdbdbd;
+    --neutral-500: #9e9e9e;
+    --neutral-600: #757575;
+    --neutral-700: #616161;
+    --neutral-800: #424242;
+    --neutral-900: #212121;
+
+    /* Светлая тема */
+    --background-color: var(--neutral-100);
+    --text-color: var(--neutral-900);
+    --form-background: white;
+    --border-color: var(--neutral-300);
+    --button-background: var(--primary-600);
+    --button-hover-background: var(--primary-700);
+    --answer-background: var(--success-light);
+    --answer-text-color: var(--success-dark);
+
+    /* Семантические цвета */
+    --success-light: #e8f5e9;
+    --success: #4caf50;
+    --success-dark: #2e7d32;
+
+    /* Тени */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
-input, select, button {
-    padding: 10px;
-    margin: 5px;
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: var(--neutral-900);
+        --text-color: var(--neutral-50);
+        --form-background: var(--neutral-800);
+        --border-color: var(--neutral-700);
+        --button-background: var(--primary-400);
+        --button-hover-background: var(--primary-300);
+        --answer-background: var(--neutral-800);
+        --answer-text-color: var(--neutral-50);
+
+        /* Переопределение теней для темной темы */
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+    }
+}
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Main Heading */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+/* Flex Container */
+#flex-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+    margin: 20px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Base Container Styles */
+.container-2-5,
+.container-4-5 {
+    background-color: var(--form-background);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Container for Calculator Form */
+.container-2-5 {
+    flex: 2;
+}
+
+/* Container for Conversion Form */
+.container-4-5 {
+    flex: 4;
+}
+
+/* Hover effect for containers */
+.container-2-5:hover,
+.container-4-5:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+/* Form Elements */
+div {
+    margin-bottom: 16px;
+}
+
+/* Labels */
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--form-background);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+/* Focus Effect for Input Fields */
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--button-background);
+    box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+/* Button Styling */
+button {
+    background-color: var(--button-background);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Button Hover Effect */
+button:hover {
+    background-color: var(--button-hover-background);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #flex-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .container-2-5,
+    .container-4-5 {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+    body {
+        padding: 16px;
+    }
+}
+
+/* Доступность */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
 }
