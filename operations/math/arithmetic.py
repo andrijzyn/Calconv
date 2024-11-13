@@ -59,7 +59,7 @@ class Arithmetic:
         return ''.join(reversed(result)).lstrip('0') or '0'
 
     @staticmethod
-    def multiply_in_base(num1: str, num2: str, base: int) -> str:
+    def multiply_in_base(num1: str, num2: str, base: int) -> tuple:
         if base > len(chars):
             raise ValueError(f"Base cannot be greater than {len(chars)}.")
 
@@ -67,8 +67,7 @@ class Arithmetic:
         num2 = num2.upper()
 
         intermediate_results = []
-
-        print(f"\nMultiplying {num1} by {num2} in base {base}:")
+        steps = []
 
         for i, digit2 in enumerate(reversed(num2)):
             carry = 0
@@ -90,7 +89,7 @@ class Arithmetic:
             intermediate_results.append(temp_result)
 
             step_str = ''.join(chars[d] for d in temp_result)
-            print(f"Step {i + 1}: {step_str}")
+            steps.append(f"Step {i + 1}: {step_str}")
 
         max_len = max(len(r) for r in intermediate_results)
         for i in range(len(intermediate_results)):
@@ -106,9 +105,8 @@ class Arithmetic:
         if carry:
             result = [carry] + result
 
-        result_str = ''.join(chars[d] for d in result).lstrip('0') or '0'
-
-        return result_str
+        result_str = ''.join(chars[d] for d in result)
+        return result_str, steps
 
     @staticmethod
     def divide_in_base(num1: str, num2: str, base: int) -> str:
@@ -132,7 +130,6 @@ class Arithmetic:
             while Utils.compare_in_base(remainder, temp, base) >= 0:
                 remainder = Arithmetic.subtract_in_base(remainder, temp, base)
                 count += 1
-                print(f"Iteration {iteration_count}: Remainder after subtraction: {remainder}")
                 iteration_count += 1
 
             # Convert the count to the appropriate base and append to quotient

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Base Converter and Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h2>Base Converter and Calculator</h2>
+<form id="calculator-form">
+    <div>
+        <label>Number 1:</label>
+        <input type="text" id="num1" placeholder="Enter number (e.g., A5)" required>
+        <label>Base:</label>
+        <input type="number" id="base1" min="2" max="36" placeholder="Base" required>
+    </div>
+    <div>
+        <label>Operator:</label>
+        <select id="operator" required>
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+    </div>
+    <div>
+        <label>Number 2:</label>
+        <input type="text" id="num2" placeholder="Enter number (e.g., 101)" required>
+        <label>Base:</label>
+        <input type="number" id="base2" min="2" max="36" placeholder="Base" required>
+    </div>
+    <button type="submit">Calculate</button>
+</form>
+<h3>Convert Between Bases</h3>
+<form id="conversion-form">
+    <div>
+        <label>Number:</label>
+        <input type="text" id="convert-number" placeholder="Enter number (e.g., 101)" required>
+        <label>From Base:</label>
+        <input type="number" id="convert-base1" min="2" max="36" placeholder="Base" required>
+        <label>To Base:</label>
+        <input type="number" id="convert-base2" min="2" max="36" placeholder="Base" required>
+    </div>
+    <button type="submit">Convert</button>
+</form>
+
+<h3>Steps:</h3>
+<pre id="steps"></pre>
+<h3>Result:</h3>
+<pre id="result"></pre>
+
+<script src="script.js"></script>
+</body>
+</html>

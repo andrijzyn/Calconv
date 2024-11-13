@@ -26,7 +26,7 @@ class Converter:
 
             if power >= 0:
                 steps.append(
-                    f"Digit: {digit} in base {base}, value: {digit_value} * (base ** {power}) = {digit_value * (base ** power)}")
+                    f"{digit}_{base} = {digit_value} * ({base}^{power}) = {digit_value * (base ^ power)}")
             power -= 1
 
         return decimal_value, steps
@@ -47,7 +47,7 @@ class Converter:
 
         while num > 0:
             remainder = num % base
-            steps.append(f"{num} divided by {base} gives quotient {num // base} and remainder {remainder}")
+            steps.append(f"{num} / {base} = quotient {num // base} and remainder {remainder}")
             result = chars[remainder] + result
             num //= base
 
