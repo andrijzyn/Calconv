@@ -1,14 +1,19 @@
+
 import re
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
 from operations.converter import Converter
 from operations.math.arithmetic import Arithmetic
+
 from typing import Tuple, List
 
 app = Flask(__name__)
 CORS(app)
 
 
+# Process the user input to perform arithmetic operations or convert bases
 def process_input(user_input: str) -> Tuple[str, List[str]]:
     def parse_math_expression(expression):
         pattern_parse = r'^([\da-fA-F]+)_(\d+)\s*([+\-*/])\s*([\da-fA-F]+)_(\d+)$'
@@ -20,6 +25,7 @@ def process_input(user_input: str) -> Tuple[str, List[str]]:
             raise ValueError("Invalid base. Base must be between 2 and 36.")
         return num1, int(base1), num2, int(base2), operator
 
+    # Calculate the result of the arithmetic operation in given bases
     def calculate_result(num1: str, base1: int, num2: str, operation: str) -> Tuple[str, List[str]]:
         operation_funcs = {
             '+': Arithmetic.add_in_base,
@@ -38,6 +44,7 @@ def process_input(user_input: str) -> Tuple[str, List[str]]:
             raise NotImplementedError(f"Operation '{operation}' not implemented for direct base arithmetic.")
         return result, steps
 
+    # Convert a number from one base to another
     def convert_between_bases(expression: str) -> Tuple[str, List[str]]:
         pattern_convert = r"(\w+)_([0-9]+)to([0-9]+)"
         match_convert = re.match(pattern_convert, expression)
@@ -65,14 +72,19 @@ def process_input(user_input: str) -> Tuple[str, List[str]]:
         return converted_result, conversion_steps
 
     elif user_input:
-        parsed_num1, parsed_base1, parsed_num2, parsed_base2, parsed_operator = parse_math_expression(user_input)
-        calculation_result, calculation_steps = calculate_result(parsed_num1, parsed_base1, parsed_num2,
-                                                                 parsed_operator)
-        return calculation_result, calculation_steps
+        try:
+            parsed_num1, parsed_base1, parsed_num2, parsed_base2, parsed_operator = parse_math_expression(user_input)
+            calculation_result, calculation_steps = calculate_result(
+                parsed_num1, parsed_base1, parsed_num2, parsed_operator)
+            return calculation_result, calculation_steps
+        except Exception as e:
+            raise ValueError(f"Error processing input: {str(e)}")
 
     raise ValueError("Unknown operation format.")
 
 
+# Route to process expressions from the user
+# noinspection PyUnreachableCode
 @app.route('/process', methods=['POST'])
 def process_expression():
     data = request.get_json(silent=True)
@@ -86,6 +98,10 @@ def process_expression():
     except ValueError as ve:
         return jsonify({'error': str(ve)}), 400
 
+# Error handler for 404 Not Found
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'error': 'Please use curl/jsonify method data receiving\sending'}), 404
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(debug=True, use_reloader=False)  # pragma: no cover
