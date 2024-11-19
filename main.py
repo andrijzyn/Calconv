@@ -101,7 +101,7 @@ def process_expression():
 # Error handler for 404 Not Found
 @app.errorhandler(404)
 def not_found(error):
-    return jsonify({'error': 'Please use curl/jsonify method data receiving\sending'}), 404
+    return jsonify({'error': 'Please use curl/jsonify method data receiving/sending'}), 404
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)  # pragma: no cover
