@@ -6,7 +6,9 @@ from operations.math.arithmetic import Arithmetic
 from typing import Tuple, List
 
 app = Flask(__name__)
-CORS(app)
+
+CORS(app, resources={r"/math": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/convert": {"origins": "http://localhost:5173"}})
 
 ######## Math
 
@@ -25,6 +27,7 @@ def calculate_result(num1: str, num2: str, base: int, operation: str) -> Tuple[s
 @app.route('/math', methods=['POST'])
 def process_math_expression():
     data = request.get_json(silent=True)
+    print(f"Received data: {data}")
 
     if not data or 'expression' not in data:
         return jsonify({'error': 'No expression provided or invalid structure'}), 400
@@ -43,12 +46,13 @@ def process_math_expression():
         operator = expression['operator']
 
         calculation_result, calculation_steps = calculate_result(num1, num2, base, operator)
-        return jsonify({'result': calculation_result, 'steps': calculation_steps})
+        return jsonify({'result': calculation_result,
+                        'steps': calculation_steps})
 
     except ValueError as ve:
-        return jsonify({'error': str(ve)}), 400
+        return jsonify({'result': str(ve)}), 400
     except Exception as e:
-        return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
+        return jsonify({'result': f'Unexpected error: {str(e)}'}), 500
 
 ######## Converter
 
@@ -56,28 +60,31 @@ def process_math_expression():
 def process_conversion():
     try:
         data = request.get_json(silent=True)
+        print(f"Received data: {data}")
 
         if not data or 'expression' not in data:
             return jsonify({'error': 'No expression provided or invalid structure'}), 400
 
         expression = data['expression']
 
-        pattern_convert = r"(\w+)_([0-9]+)to([0-9]+)"
-        match_convert = re.match(pattern_convert, expression)
+        required_keys = ['number', 'fromBase', 'toBase']
+        missing_keys = [key for key in required_keys if key not in expression]
 
-        if not match_convert:
-            return jsonify({'error': 'Invalid input format for conversion. Expected format: number_base1tobase2'}), 400
+        if missing_keys:
+            return jsonify({'error': f'Missing keys in expression: {", ".join(missing_keys)}'}), 400
 
-        convert_number, convert_base1, convert_base2 = match_convert.groups()
-        convert_base1, convert_base2 = int(convert_base1), int(convert_base2)
+        number = expression['number']
+        print(expression['number'])
+        from_base = int(expression['fromBase'])
+        to_base = int(expression['toBase'])
 
-        if convert_base1 < 2 or convert_base2 < 2:
-            return jsonify({'error': 'Bases must be 2 or higher.'}), 400
-        if convert_base1 > 36 or convert_base2 > 36:
-            return jsonify({'error': 'Bases must not exceed 36.'}), 400
+        if from_base < 2 or to_base < 2:
+            return jsonify({'result': 'Bases must be 2 or higher.'}), 400
+        if from_base > 36 or to_base > 36:
+            return jsonify({'result': 'Bases must not exceed 36.'}), 400
 
-        convert_decimal_value, convert_steps = Converter.convert_to_decimal(convert_number, convert_base1)
-        result_conversion, new_conversion_steps = Converter.convert_from_decimal(convert_decimal_value, convert_base2)
+        convert_decimal_value, convert_steps = Converter.convert_to_decimal(number, from_base)
+        result_conversion, new_conversion_steps = Converter.convert_from_decimal(convert_decimal_value, to_base)
 
         if isinstance(new_conversion_steps, str):
             new_conversion_steps = [new_conversion_steps]
@@ -88,9 +95,10 @@ def process_conversion():
         })
 
     except ValueError as ve:
-        return jsonify({'error': str(ve)}), 400
+        return jsonify({'result': str(ve)}), 400
     except Exception as e:
-        return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
+        return jsonify({'result': f'Unexpected error: {str(e)}'}), 500
+
 
 ######## end
 
