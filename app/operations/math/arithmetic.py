@@ -1,4 +1,5 @@
 from operations.math.utils import Utils
+import json
 
 chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -106,7 +107,7 @@ class Arithmetic:
             result = [carry] + result
 
         result_str = ''.join(chars[d] for d in result)
-        return result_str, steps
+        return result_str, json.dumps(steps, indent=4)
 
     @staticmethod
     def divide_in_base(num1: str, num2: str, base: int) -> str:

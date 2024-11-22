@@ -1,5 +1,7 @@
-chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+import json
+from typing import Tuple, List, Any
 
+CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 class Converter:
     @staticmethod
@@ -32,14 +34,14 @@ class Converter:
         return decimal_value, steps
 
     @staticmethod
-    def convert_from_decimal(number: int, base: int) -> tuple[str, list[str]]:
+    def convert_from_decimal(number: int, base: int) -> tuple[str, list[str] | list[Any]] | tuple[str | Any, str]:
         if base < 2:
             raise ValueError("Base must be 2 or higher.")
         if base == 10:
             return str(number), ["0"] if number == 0 else []
 
-        if base > len(chars):
-            raise ValueError(f"Base cannot be greater than {len(chars)}.")
+        if base > len(CHARS):
+            raise ValueError(f"Base cannot be greater than {len(CHARS)}.")
 
         result = ''
         steps = []
@@ -47,8 +49,8 @@ class Converter:
 
         while num > 0:
             remainder = num % base
-            steps.append(f"{num} / {base} = quotient {num // base} and remainder {remainder}")
-            result = chars[remainder] + result
+            steps.append(f"{num} / {base} = quotient {num // base} and remainder {remainder}\n")
+            result = CHARS[remainder] + result
             num //= base
 
-        return result or '0', steps
+        return result or '0', json.dumps(steps, indent=4)
