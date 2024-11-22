@@ -70,44 +70,49 @@ class Arithmetic:
         intermediate_results = []
         steps = []
 
-        for i, digit2 in enumerate(reversed(num2)):
+        try:
+            for i, digit2 in enumerate(reversed(num2)):
+                carry = 0
+                temp_result = [0] * i
+
+                digit2_val = chars.index(digit2)
+
+                for digit1 in reversed(num1):
+                    digit1_val = chars.index(digit1)
+
+                    product = digit1_val * digit2_val + carry
+                    carry = product // base
+                    temp_result.append(product % base)
+
+                if carry:
+                    temp_result.append(carry)
+
+                temp_result = temp_result[::-1]
+                intermediate_results.append(temp_result)
+
+                step_str = ''.join(chars[d] for d in temp_result)
+                steps.append(f"Step {i + 1}: {step_str}")
+
+            max_len = max(len(r) for r in intermediate_results)
+            for i in range(len(intermediate_results)):
+                intermediate_results[i] = [0] * (max_len - len(intermediate_results[i])) + intermediate_results[i]
+
+            result = [0] * max_len
             carry = 0
-            temp_result = [0] * i
-
-            digit2_val = chars.index(digit2)
-
-            for digit1 in reversed(num1):
-                digit1_val = chars.index(digit1)
-
-                product = digit1_val * digit2_val + carry
-                carry = product // base
-                temp_result.append(product % base)
+            for i in range(max_len - 1, -1, -1):
+                column_sum = sum(r[i] for r in intermediate_results) + carry
+                carry = column_sum // base
+                result[i] = column_sum % base
 
             if carry:
-                temp_result.append(carry)
+                result = [carry] + result
 
-            temp_result = temp_result[::-1]
-            intermediate_results.append(temp_result)
+            result_str = ''.join(chars[d] for d in result)
+            return result_str, json.dumps(steps, indent=4)
 
-            step_str = ''.join(chars[d] for d in temp_result)
-            steps.append(f"Step {i + 1}: {step_str}")
-
-        max_len = max(len(r) for r in intermediate_results)
-        for i in range(len(intermediate_results)):
-            intermediate_results[i] = [0] * (max_len - len(intermediate_results[i])) + intermediate_results[i]
-
-        result = [0] * max_len
-        carry = 0
-        for i in range(max_len - 1, -1, -1):
-            column_sum = sum(r[i] for r in intermediate_results) + carry
-            carry = column_sum // base
-            result[i] = column_sum % base
-
-        if carry:
-            result = [carry] + result
-
-        result_str = ''.join(chars[d] for d in result)
-        return result_str, json.dumps(steps, indent=4)
+        except Exception as e:
+            logging.error(f'Error in multiply_in_base: {str(e)}')
+            raise
 
     @staticmethod
     def divide_in_base(num1: str, num2: str, base: int) -> str:
