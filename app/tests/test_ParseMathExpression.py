@@ -1,4 +1,3 @@
-import sys
 import unittest
 from main import parse_math_expression
 
