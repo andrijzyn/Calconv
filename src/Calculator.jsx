@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import Converter from "./Converter.jsx";
-
 
 const Calculator = ({ onCalculate }) => {
     const [num1, setNum1] = useState('');

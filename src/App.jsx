@@ -1,41 +1,22 @@
 import { useState } from 'react';
 import Calculator from './Calculator';
 import Converter from './Converter';
+import Steps from './Steps';
+import Result from './Result';
 import './App.css';
+import useRequest from './useRequest';
 
 const App = () => {
-    const [result, setResult] = useState('');
-    const [steps, setSteps] = useState('');
-
-    const handleRequest = async (url, expression) => {
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ expression }),
-            });
-            const data = await response.json();
-            return {
-                result: data.result || data.error,
-                steps: data.steps ? data.steps.join('\n') : 'No steps available',
-            };
-        } catch (error) {
-            return { result: 'Error: ' + error.message, steps: '' };
-        }
-    };
+    const { result, steps, handleRequest } = useRequest();
 
     const handleCalculate = async (expression) => {
         const url = 'http://localhost:5000/process';
-        const { result, steps } = await handleRequest(url, expression);
-        setResult(result);
-        setSteps(steps);
+        await handleRequest(url, expression);
     };
 
     const handleConvert = async (expression) => {
         const url = 'http://localhost:5000/process';
-        const { result, steps } = await handleRequest(url, expression);
-        setResult(result);
-        setSteps(steps);
+        await handleRequest(url, expression);
     };
 
     return (
@@ -46,10 +27,8 @@ const App = () => {
                 <Converter onConvert={handleConvert} />
             </div>
             <hr />
-            <h3>Steps:</h3>
-            <pre id="steps">{steps}</pre>
-            <h3>Result:</h3>
-            <pre id="result">{result}</pre>
+            <Steps steps={steps} />
+            <Result result={result} />
         </div>
     );
 };
