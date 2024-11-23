@@ -49,8 +49,9 @@ class Converter:
 
         while num > 0:
             remainder = num % base
-            steps.append(f"{num} / {base} = quotient {num // base} and remainder {remainder}\n")
+            steps.append(f"{num} / {base} = quotient {num // base} and remainder {remainder}")
             result = CHARS[remainder] + result
             num //= base
 
+        print(result)
         return result or '0', json.dumps(steps, indent=4)
