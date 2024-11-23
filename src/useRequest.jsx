@@ -2,28 +2,34 @@ import { useState } from 'react';
 
 const useRequest = () => {
     const [result, setResult] = useState('');
-    const [steps, setSteps] = useState('');
+    const [steps, setSteps] = useState([]);
 
-    const handleRequest = async (url, expression) => {
+    const handleRequest = async (url, data) => {
         try {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ expression }),
+                body: JSON.stringify(data),
             });
-            const data = await response.json();
-            setResult(data.result || data.error);
-            setSteps(data.steps ? data.steps.join('\n') : 'No steps available');
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const responseData = await response.json();
+
+            setResult(responseData.result);
+            setSteps(responseData.steps);
+
         } catch (error) {
-            setResult('Error: ' + error.message);
-            setSteps('');
+            console.error('Error during the request:', error);
         }
     };
 
     return {
         result,
         steps,
-        handleRequest
+        handleRequest,
     };
 };
 

@@ -1,52 +1,92 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+import useRequest from './useRequest';
 
-const Calculator = ({ onCalculate }) => {
+const Calculator = () => {
     const [num1, setNum1] = useState('');
-    const [base1, setBase1] = useState(10);
     const [operator, setOperator] = useState('+');
     const [num2, setNum2] = useState('');
-    const [base2, setBase2] = useState(10);
+    const [base, setBase] = useState(10);
 
-    const handleSubmit = (event) => {
+    const { result, steps, handleRequest } = useRequest();
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const expression = `${num1}_${base1} ${operator} ${num2}_${base2}`;
-        onCalculate(expression);
+        const url = 'http://localhost:5000/math';
+        const data = {
+            num1,
+            num2,
+            base,
+            operator
+        };
+
+        await handleRequest(url, data);
     };
 
-    return (
-        <div className="container calculator-container">
-            <h3>Calculator</h3>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Number 1:</label>
-                    <input type="text" value={num1} onChange={(e) => setNum1(e.target.value)} placeholder="Enter number (e.g., A5)" required />
-                    <label>Base:</label>
-                    <input type="number" value={base1} onChange={(e) => setBase1(e.target.value)} min="2" max="36" placeholder="Base" required />
-                </div>
-                <div>
-                    <label>Operator:</label>
-                    <select value={operator} onChange={(e) => setOperator(e.target.value)} required>
-                        <option value="+">+</option>
-                        <option value="-">-</option>
-                        <option value="*">*</option>
-                        <option value="/">/</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Number 2:</label>
-                    <input type="text" value={num2} onChange={(e) => setNum2(e.target.value)} placeholder="Enter number (e.g., 101)" required />
-                    <label>Base:</label>
-                    <input type="number" value={base2} onChange={(e) => setBase2(e.target.value)} min="2" max="36" placeholder="Base" required />
-                </div>
-                <button type="submit">Calculate</button>
-            </form>
-        </div>
-    );
-};
+    console.log("Received steps:", steps);
 
-Calculator.propTypes = {
-    onCalculate: PropTypes.func.isRequired, // must be a function and is required
+    return (
+        <form onSubmit={handleSubmit}>
+            <div>
+                <label htmlFor="num1">Number 1:</label>
+                <input
+                    type="text"
+                    id="num1"
+                    value={num1}
+                    onChange={(e) => setNum1(e.target.value)}
+                />
+            </div>
+
+            <div>
+                <label htmlFor="num2">Number 2:</label>
+                <input
+                    type="text"
+                    id="num2"
+                    value={num2}
+                    onChange={(e) => setNum2(e.target.value)}
+                />
+            </div>
+
+            <div>
+                <label htmlFor="base">Base:</label>
+                <input
+                    type="number"
+                    id="base"
+                    value={base}
+                    onChange={(e) => setBase(e.target.value)}
+                />
+            </div>
+
+            <div>
+                <label htmlFor="operator">Operator:</label>
+                <select
+                    id="operator"
+                    value={operator}
+                    onChange={(e) => setOperator(e.target.value)}
+                >
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </select>
+            </div>
+
+            <button type="submit">Calculate</button>
+
+            {result && (
+                <div>
+                    <h3>Result:</h3>
+                    <p>{result}</p>
+                </div>
+            )}
+
+            {steps && steps.length > 0 && (
+                <div>
+                    <h3>Steps:</h3>
+                    <ul> {steps} </ul>
+                </div>
+            )}
+        </form>
+    );
 };
 
 export default Calculator;

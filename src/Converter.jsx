@@ -1,60 +1,78 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+import useRequest from './useRequest';
 
-
-const Converter = ({ onConvert }) => {
+const Converter = () => {
     const [number, setNumber] = useState('');
     const [fromBase, setFromBase] = useState(10);
     const [toBase, setToBase] = useState(10);
 
-    const handleSubmit = (event) => {
+    const { result, steps, handleRequest } = useRequest();
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const expression = `${number}_${fromBase}to${toBase}`;
-        onConvert(expression);
+        const url = 'http://localhost:5000/convert';
+        const data = {
+            number,
+            fromBase,
+            toBase
+        };
+
+        await handleRequest(url, data);
     };
 
     return (
-        <div className="container converter-container">
-            <h3>Converter</h3>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Number:</label>
-                    <input
-                        type="text"
-                        value={number}
-                        onChange={(e) => setNumber(e.target.value)}
-                        placeholder="Enter number (e.g., 101)"
-                        required
-                    />
-                    <label>From Base:</label>
-                    <input
-                        type="number"
-                        value={fromBase}
-                        onChange={(e) => setFromBase(e.target.value)}
-                        min="2"
-                        max="36"
-                        placeholder="Base"
-                        required
-                    />
-                    <label>To Base:</label>
-                    <input
-                        type="number"
-                        value={toBase}
-                        onChange={(e) => setToBase(e.target.value)}
-                        min="2"
-                        max="36"
-                        placeholder="Base"
-                        required
-                    />
-                </div>
-                <button type="submit">Convert</button>
-            </form>
-        </div>
-    );
-};
+        <form onSubmit={handleSubmit}>
+            <div>
+                <label htmlFor="number">Number:</label>
+                <input
+                    type="text"
+                    id="number"
+                    value={number}
+                    onChange={(e) => setNumber(e.target.value)}
+                />
+            </div>
 
-Converter.propTypes = {
-    onConvert: PropTypes.func.isRequired, // must be a function and is required
+            <div>
+                <label htmlFor="fromBase">From Base:</label>
+                <input
+                    type="number"
+                    id="fromBase"
+                    value={fromBase}
+                    onChange={(e) => setFromBase(e.target.value)}
+                />
+            </div>
+
+            <div>
+                <label htmlFor="toBase">To Base:</label>
+                <input
+                    type="number"
+                    id="toBase"
+                    value={toBase}
+                    onChange={(e) => setToBase(e.target.value)}
+                />
+            </div>
+
+            <button type="submit">Convert</button>
+
+            {result && (
+                <div>
+                    <h3>Result:</h3>
+                    <p>{result}</p>
+                </div>
+            )}
+
+            {steps && steps.length > 0 && (
+                <div>
+                    <h3>Steps:</h3>
+                    <ul>
+                        {steps.map((step, index) => (
+                            <li key={index}>{step}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </form>
+    );
 };
 
 export default Converter;
