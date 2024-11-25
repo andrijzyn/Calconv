@@ -83,8 +83,15 @@ const Calculator = () => {
                 <h3>Result:</h3>
                 <JSONTree data={result} />
                 <h3>Steps:</h3>
-                <JSONTree data={steps} />
+                <div style={{
+                    whiteSpace: 'pre-wrap',
+                    wordWrap: 'break-word',
+                    textAlign: 'right'
+                }}>
+                    <JSONTree data={steps}/>
+                </div>
             </div>
+
         </form>
     );
 };

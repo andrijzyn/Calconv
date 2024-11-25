@@ -1,4 +1,5 @@
 from operations.math.utils import Utils
+from flask import logging
 import json
 
 chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -91,7 +92,7 @@ class Arithmetic:
                 intermediate_results.append(temp_result)
 
                 step_str = ''.join(chars[d] for d in temp_result)
-                steps.append(f"Step {i + 1}: {step_str}")
+                steps.append(step_str)
 
             max_len = max(len(r) for r in intermediate_results)
             for i in range(len(intermediate_results)):
@@ -109,7 +110,6 @@ class Arithmetic:
 
             result_str = ''.join(chars[d] for d in result)
             return result_str, json.dumps(steps, indent=4)
-
         except Exception as e:
             logging.error(f'Error in multiply_in_base: {str(e)}')
             raise

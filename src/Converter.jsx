@@ -32,27 +32,27 @@ const Converter = () => {
                     onChange={(e) => setNumber(e.target.value)}
                 />
             </div>
-                <div className="input-row">
-                    <div className="input-group">
-                        <label htmlFor="fromBase">From Base:</label>
-                        <input
-                            type="number"
-                            id="fromBase"
-                            value={fromBase}
-                            onChange={(e) => setFromBase(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="input-group">
-                        <label htmlFor="toBase">To Base:</label>
-                        <input
-                            type="number"
-                            id="toBase"
-                            value={toBase}
-                            onChange={(e) => setToBase(e.target.value)}
-                        />
-                    </div>
+            <div className="input-row">
+                <div className="input-group">
+                    <label htmlFor="fromBase">From Base:</label>
+                    <input
+                        type="number"
+                        id="fromBase"
+                        value={fromBase}
+                        onChange={(e) => setFromBase(e.target.value)}
+                    />
                 </div>
+
+                <div className="input-group">
+                    <label htmlFor="toBase">To Base:</label>
+                    <input
+                        type="number"
+                        id="toBase"
+                        value={toBase}
+                        onChange={(e) => setToBase(e.target.value)}
+                    />
+                </div>
+            </div>
 
             <button type="submit">Convert</button>
 
@@ -62,11 +62,17 @@ const Converter = () => {
                 </div>
             )}
 
-            <div>
-                <h3>Result:</h3>
+            <h3>Result:</h3>
+            <div style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
                 <JSONTree data={result} />
-                <h3>Steps:</h3>
-                <JSONTree data={steps} />
+            </div>
+
+            <h3>Steps:</h3>
+            <div style={{
+                whiteSpace: 'pre-wrap',
+                wordWrap: 'break-word'
+            }}>
+                <JSONTree data={steps}/>
             </div>
         </form>
     );
