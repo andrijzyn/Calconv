@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import useRequest from './useRequest';
+import { JSONTree } from 'react-json-tree';
 
 const Converter = () => {
     const [number, setNumber] = useState('');
     const [fromBase, setFromBase] = useState(10);
     const [toBase, setToBase] = useState(10);
 
-    const { result, steps, handleRequest } = useRequest();
+    const { result, steps, error, handleRequest } = useRequest();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -22,7 +23,7 @@ const Converter = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div>
+            <div className="text">
                 <label htmlFor="number">Number:</label>
                 <input
                     type="text"
@@ -31,46 +32,42 @@ const Converter = () => {
                     onChange={(e) => setNumber(e.target.value)}
                 />
             </div>
+                <div className="input-row">
+                    <div className="input-group">
+                        <label htmlFor="fromBase">From Base:</label>
+                        <input
+                            type="number"
+                            id="fromBase"
+                            value={fromBase}
+                            onChange={(e) => setFromBase(e.target.value)}
+                        />
+                    </div>
 
-            <div>
-                <label htmlFor="fromBase">From Base:</label>
-                <input
-                    type="number"
-                    id="fromBase"
-                    value={fromBase}
-                    onChange={(e) => setFromBase(e.target.value)}
-                />
-            </div>
-
-            <div>
-                <label htmlFor="toBase">To Base:</label>
-                <input
-                    type="number"
-                    id="toBase"
-                    value={toBase}
-                    onChange={(e) => setToBase(e.target.value)}
-                />
-            </div>
+                    <div className="input-group">
+                        <label htmlFor="toBase">To Base:</label>
+                        <input
+                            type="number"
+                            id="toBase"
+                            value={toBase}
+                            onChange={(e) => setToBase(e.target.value)}
+                        />
+                    </div>
+                </div>
 
             <button type="submit">Convert</button>
 
-            {result && (
-                <div>
-                    <h3>Result:</h3>
-                    <p>{result}</p>
+            {error && (
+                <div style={{ color: 'red', marginTop: '10px' }}>
+                    <strong>Error:</strong> {error.message}
                 </div>
             )}
 
-            {steps && steps.length > 0 && (
-                <div>
-                    <h3>Steps:</h3>
-                    <ul>
-                        {steps.map((step, index) => (
-                            <li key={index}>{step}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            <div>
+                <h3>Result:</h3>
+                <JSONTree data={result} />
+                <h3>Steps:</h3>
+                <JSONTree data={steps} />
+            </div>
         </form>
     );
 };
