@@ -1,18 +1,19 @@
 :root {
-  --primary-500: #90caf9;
-  --primary-600: #64b5f6;
+  --primary-500: #f48fb1;
+  --primary-600: #f06292;
   --neutral-100: #ffffff;
-  --neutral-900: #000000;
-  --background-color: var(--neutral-100);
+  --neutral-900: #212121;
+  --background-color: #121212;
   --text-color: var(--neutral-900);
-  --form-background: #f5f5f5;
-  --border-color: #cccccc;
-  --button-background: var(--primary-600);
+  --form-background: #fce4ec;
+  --border-color: #f8bbd0;
+  --button-background: var(--accent-color);
   --button-hover-background: var(--primary-500);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05);
   --foreground-color: var(--neutral-900);
   --accent-color: #81c784;
   --error-color: #e57373;
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,16 +29,11 @@
 }
 
 body {
+  background: linear-gradient(139deg, rgba(0,54,255,0.25) 0%, rgba(128,27,202,0.25) 28%, rgba(255,0,149,0.25) 100%);
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.input-row {
-  background-color: var(--form-background);
-  color: var(--foreground-color);
-  border: 1px solid var(--border-color);
 }
 
 .window {
