@@ -1,8 +1,27 @@
-# React + Vite
+## 🧮 A calculator for a variety of bit systems 
+> [!NOTE]
+> This project (Flask + React, ESBuild, Vite) was created for the discipline "Discrete Mathematic".
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The primary objective was to develop practical skills in project structuring, even if the project was relatively straightforward. Through enhancements, I transformed a console application that parsed values from a distinct syntax into a web application.
 
-Currently, two official plugins are available:
+The structure is divided into two distinct sections: _the server side and the client side_. The client, through an interface developed using **React** and **Bootstrap**, sends JSON requests to a server written in Python using the **Flask** network library, which then responds.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![output_image](https://github.com/user-attachments/assets/975a05b9-4cc9-4198-8ab6-ca1ebb8a9962)
+
+---
+
+### Deployment
+```
+git clone https://github.com/andrijzyn/Calconv.git
+cd calconv
+
+**starting client side**
+npm run dev
+
+**in another console | starting server**
+cd app
+source .venv/bin/activate
+python main.py
+```
+
+The server has been started in the http://localhost:5173
