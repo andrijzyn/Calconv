@@ -1,6 +1,6 @@
-## 🧮 A calculator for a variety of bit systems 
+## 🧮 A variety of bit systems calculator
 > [!NOTE]
-> This project (Flask + React, ESBuild, Vite) was created for the discipline "Discrete Mathematic".
+> This project was created for the discipline "Discrete Mathematic".
 
 The primary objective was to develop practical skills in project structuring, even if the project was relatively straightforward. Through enhancements, I transformed a console application that parsed values from a distinct syntax into a web application.
 
